@@ -1,0 +1,62 @@
+#include <Servo.h>
+
+Servo myservofing;  // create servo object to control the claw's fingers
+Servo myservowrist;  // create servo object to control the claw's wrist
+// need a breadboard to power both servos from one arduino
+
+int pos = 0;  // variable to store the servo position
+
+
+void setup() {
+  myservofing.attach(9);  // sets finger servo on pin 9
+  myservowrist.attach(8);  // sets wrist servo on pin 8
+  Serial.begin(9600);  
+}
+
+void loop() {
+// begin handshake
+Serial.println("Initiating Handshake!");
+// first move wrist down
+Serial.println("Down Low!");
+  for (pos = 60; pos <= 90; pos += 1) { // wrist goes from 60 to 90 degrees in steps of 1
+    myservowrist.write(pos);  // tells wrist servo to go to pos
+    delay(25); // pause 25ms in between to slow down movement
+  }
+
+delay(100); // pause
+
+// move wrist back up
+Serial.println("Up High!");
+  for (pos = 90; pos >= 60; pos -= 1) { // wrist goes from 90 to 60 degrees in steps of 1
+    myservowrist.write(pos);  // tells wrist servo to go to pos
+    delay(25); // pause 25ms in between to slow down movement
+  }
+
+// use the fingers to "clap"
+ Serial.println("Opening Up!");
+   for (pos = 75; pos >= 10; pos -= 1) { // finger goes from 75 degrees to 10 degrees
+  myservofing.write(pos);           // tell finger servo to go to pos
+  delay(10);                    // pause 10ms in between to slow down movement
+}
+
+delay(100); // brief pause
+
+ Serial.println("Closing Down!");
+   for (pos = 10; pos <= 75; pos += 1) { // finger goes from 10 degrees to 75 degrees
+  myservofing.write(pos);           // tell finger servo to go to pos
+  delay(10);                    // pause 10ms in between to slow down movement
+}
+
+// reset to initial claw position
+ Serial.println("Reset!");
+   for (pos = 75; pos >= 10; pos -= 1) { // finger goes from 75 degrees to 10 degrees
+  myservofing.write(pos);           // tell finger servo to go to pos
+  delay(10);                    // pause 10ms in between to slow down movement
+}
+
+Serial.println("Finished!");
+delay(3000); // delay for time to stop action
+
+// the handshake is now complete
+// can loop as many times as needed
+}
